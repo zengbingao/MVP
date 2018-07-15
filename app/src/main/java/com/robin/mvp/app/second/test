@@ -1,0 +1,270 @@
+代码规范：（源文件编码格式为 UTF-8）
+参考：http://www.codeceo.com/article/android-coding-standard-guide.html
+     https://google.github.io/styleguide/javaguide.html
+
+1.区块划分:
+
+    1.1 建议使用注释将源文件分为明显的区块，区块划分如下:
+        1.常量声明区
+        2.UI控件成员变量声明区
+        3.普通成员变量声明区
+        4.内部接口声明区
+        5.初始化相关方法区
+        6.事件响应方法区
+        7.普通逻辑方法区
+        8.重载的逻辑方法区
+        9.发起异步任务方法区
+        10.异步任务回调方法区
+        11.生命周期回调方法区（出去onCreate()方法）
+        12.内部类声明区
+        
+    1.2 类成员排列通用规则:
+        1.按照发生的先后顺序排列
+        2.常量按照使用先后排列
+        3.UI控件成员变量按照layout文件中的先后顺序排列
+        4.普通成员变量按照使用的先后顺序排列
+        5.方法基本上都按照调用的先后顺序在各自区块中排列
+        6.相关功能作为小区块放在一起（或者封装掉）
+        
+    1.3 重载：永不分离
+        当一个类有多个构造函数，或是多个同名方法，这些函数/方法应该按顺序出现在一起，中间不要放进其它函数/方法。
+        
+        
+2.关于换行：
+
+    1.格式化代码
+    2.if else do while for 就算是有一个语句也要加大括号
+    3.逗号，等于号后换行，'.','&','|'前换行
+    
+    
+3.命名：
+
+    3.1 不要组合声明，如：int a,b;要分开，像这样
+        int a;
+        int b;
+        
+    3.2 包名
+        包名全部小写，连续的单词只是简单地连接起来，不使用下划线。
+        采用反域名命名规则，全部使用小写字母。一级包名为com，二级包名为xx（可以是公司或则个人的随便），三级包名根据应用进行命名，四级包名为模块名或层级名。
+        
+        3.2.1：按照模块划分：
+            包名	                                                    此包中包含
+            com.xx.应用名称缩写.activity	                            页面用到的Activity类 (activitie层级名用户界面层)
+            com.xx.应用名称缩写.base	                                基础共享的类
+            com.xx.应用名称缩写.adapter	                            页面用到的Adapter类 (适配器的类)
+            com.xx.应用名称缩写.util	                                公共工具方法类（util模块名）
+            com.xx.应用名称缩写.bean	                                下面可分：vo、po、dto 此包中包含：JavaBean类
+            com.xx.应用名称缩写.model	                                模型类
+            com.xx.应用名称缩写.db	                                数据库操作类
+            com.xx.应用名称缩写.view(或者 com.xx.应用名称缩写.widget)	自定义的View类等
+            com.xx.应用名称缩写.service	                            Service服务
+            com.xx.应用名称缩写.receiver	                            BroadcastReceiver服务
+            注意：如果项目采用MVP，所有M、V、P抽取出来的接口都放置在相应模块的i包下，所有的实现都放置在相应模块的impl下
+            
+        3.2.2：按照功能划分：(以MVP为例)
+            包名                                                     此包中包含
+            com.xx.app                                              所有的功能
+                com.xx.app.xxxx（功能1）                             功能1
+                    com.xx.app.xxxx.presenter                       IXxxPresenter XxxPresenterImpl
+                    com.xx.app.xxxx.model                           IXxxModel XxxModelImpl XxxModel
+                    com.xx.app.xxxx.view                            IXxxVView XxxViewImpl XxxActivity XXXFragment XxxAdapter
+            com.xx.base                                             基础共享的类(BaseActivity)
+            com.xx.util                                             公共工具方法类(TimeUtils)
+            com.xx.db                                               数据库操作类
+            com.xx.view（或者com.xx.widget）                         自定义view
+            com.xx.service	                                        Service
+            com.xx.receiver	                                        BroadcastReceiver
+            com.xx.provider                                         ContentProvider
+            com.xx.common
+            
+    3.3 类名(大驼峰。e.g. FirstActivity)
+    
+        3.3.1接口：IXxx，实现类:XxxImpl。或者接口：Xxxable/Xxxible，实现类：XxxableImpl/XxxibleImpl
+        3.3.2静态类：AbsXxx,实现类:同普通类
+        3.3.3普通类：Xxx
+        3.3.4枚举类：EnumXxx
+        3.3.5注解类：Xxx
+        3.3.6其他:同普通类
+        3.3.7具体来讲：
+            类	              描述	                                                        例如
+            Activity 类	      Activity为后缀标识	                                            欢迎页面类WelcomeActivity
+            Adapter类	      Adapter 为后缀标识	                                            新闻详情适配器 NewDetailAdapter
+            解析类	          Parser为后缀标识	                                            首页解析类HomePosterParser
+            工具方法类	      Util或Manager为后缀标识（与系统或第三方的Utils区分）或功能+Util	    线程池管理类：ThreadPoolManager日志工具类：LogUtil（Logger也可）打印工具类：PrinterUtil
+            数据库类	          以DBHelper后缀标识	                                            新闻数据库：NewDBHelper
+            Service类	      以Service为后缀标识	                                            时间服务TimeServiceBroadcast
+            Receiver类	      以Receiver为后缀标识	                                        推送接收JPushReceiver
+            ContentProvider	  以Provider为后缀标识	
+            自定义的共享基础类  以Base开头	                                                    BaseActivity,BaseFragment
+            测试类            测试的类的名称开始，以Test结束                                    HashTest 或 HashIntegrationTest
+            
+    3.4 方法名(小驼峰。e.g.firstMethod)
+        
+        方法	                    说明
+        initXX()	            初始化相关方法,使用init为前缀标识，如初始化布局initView()
+        isXX() checkXX()	    方法返回值为boolean型的请使用is或check为前缀标识
+        getXX()	                返回某个值的方法，使用get为前缀标识
+        handleXX()	            对数据进行处理的方法，尽量使用handle为前缀标识
+        displayXX()/showXX()	弹出提示框和提示信息，使用display/show为前缀标识
+        saveXX()	            与保存数据相关的，使用save为前缀标识
+        resetXX()	            对数据重组的，使用reset前缀标识
+        clearXX()	            清除数据相关的
+        removeXXX()	            清除数据相关的
+        drawXXX()	            绘制数据或效果相关的，使用draw前缀标识
+        
+    3.5 字段名
+    
+        3.5.1 常量：全部字母大写，用下划线分隔单词。
+              首先明确一点，final修饰的一定是常量。但是如果他的可观察状态可以改变，那么他就不是一个常量。
+              
+        3.5.2 非常量：小驼峰。e.g.firstField
+              非公有，非静态字段命名以m开头。                              private int mPrivate;  protected int mProtected; 
+              静态字段命名以s开头。                                       private static MyClass sSingleton;  
+              公有非静态字段命名以p开头。                                  public int pField; 
+              公有静态字段（全局变量）命名以g开头。                         public static int gField; 
+        注意：public static final 字段(常量) 全部大写，并用下划线连起来。
+        
+        3.5.3 参数名：小驼峰
+        
+    3.6 资源文件名
+        3.6.1 资源布局文件（XML文件（layout布局文件））：
+            3.6.1.1 contentview 命名必须以全部单词小写，单词间以下划线分割，使用名词或名词词组。所有Activity或Fragment的contentView必须与其类名对应，对应规则为：
+                  将所有字母都转为小写，将类型和功能调换（也就是后缀变前缀）。
+                  例如：activity_main.xml
+                  
+            3.6.1.2 Dialog命名：dialog_描述.xml
+                  例如：dialog_hint.xml
+                  
+            3.6.1.3 PopupWindow命名：ppw_描述.xml
+                  例如：ppw_info.xml
+                  
+            3.6.1.4 列表项命名：item_描述.xml
+                  例如：item_city.xml
+                  
+            3.6.1.5 包含项命名：模块_(位置)描述.xml
+                  例如：activity_main_head.xml、activity_main_bottom.xml
+                  注意：通用的包含项命名采用：项目名称缩写_描述.xml
+                  例如：xxxx_title.xml
+                  
+        3.6.2 资源文件（图片drawable文件夹下）：
+        
+            全部小写，采用下划线命名法，加前缀区分
+            命名模式：可加后缀 _small 表示小图, _big 表示大图，逻辑名称可由多个单词加下划线组成，采用以下规则：
+                用途_模块名_逻辑名称
+                用途_模块名_颜色
+                用途_逻辑名称
+                用途_颜色
+                说明：用途也指控件类型（具体见UI控件缩写表）
+                例如：
+                btn_main_home.png 按键
+                divider_maket_white.png 分割线
+                ic_edit.png 图标
+                bg_main.png 背景
+                btn_red.png 红色按键
+                btn_red_big.png 红色大按键
+                ic_head_small.png 小头像
+                bg_input.png 输入框背景
+                divider_white.png 白色分割线
+                
+                如果有多种形态如按钮等除外如 btn_xx.xml（selector）
+                
+                名称	                                功能
+                btn_xx	                            按钮图片使用btn_整体效果（selector）
+                btn_xx_normal	                    按钮图片使用btn_正常情况效果
+                btn_xx_pressed	                    按钮图片使用btn_点击时候效果
+                btn_xx_focused	                    state_focused聚焦效果
+                btn_xx_disabled	                    state_enabled (false)不可用效果
+                btn_xx_checked	                    state_checked选中效果
+                btn_xx_selected	                    state_selected选中效果
+                btn_xx_hovered	                    state_hovered悬停效果
+                btn_xx_checkable	                state_checkable可选效果
+                btn_xx_activated	                state_activated激活的
+                btn_xx_windowfocused	            state_window_focused
+                bg_head	                            背景图片使用bg_功能_说明
+                def_search_cell	                    默认图片使用def_功能_说明
+                ic_more_help	                    图标图片使用ic_功能_说明
+                seg_list_line	                    具有分隔特征的图片使用seg_功能_说明
+                sel_ok	                            选择图标使用sel_功能_说明
+            
+        3.6.3 动画文件（anim文件夹下）：
+        
+            全部小写，采用下划线命名法，加前缀区分。
+            具体动画采用以下规则：
+            模块名_逻辑名称
+            逻辑名称
+            refresh_progress.xml
+            market_cart_add.xml
+            market_cart_remove.xml
+            普通的tween动画采用如下表格中的命名方式
+            // 前面为动画的类型，后面为方向
+            
+            动画命名例子	                规范写法
+            fade_in	                    淡入
+            fade_out	                淡出
+            push_down_in	            从下方推入
+            push_down_out	            从下方推出
+            push_left	                推向左方
+            slide_in_from_top	        从头部滑动进入
+            zoom_enter	                变形进入
+            slide_in	                滑动进入
+            shrink_to_middle	        中间缩小
+            
+        3.6.4 values中name命名：
+            类别	            命名	                                                                        示例
+            strings	        strings的name命名使用下划线命名法，采用以下规则：模块名+逻辑名称	                main_menu_about 主菜单按键文字friend_title 好友模块标题栏friend_dialog_del 好友删除提示login_check_email 登录验证
+                                                                                                        dialog_title    弹出框标题
+                                                                                                        button_ok       确认键 loading 加载文字
+            colors	        colors的name命名使用下划线命名法，采用以下规则：模块名+逻辑名称 颜色	            friend_info_bg friend_bg transparent gray
+            styles	        styles的name命名使用 Camel命名法，采用以下规则：模块名+逻辑名称	                main_tabBottom
+            
+        3.6.5 layout中的id命名
+              命名模式为：view缩写_view的逻辑名称
+              
+              
+</////////////////////////////////////////////////附录////////////////////////////////////////////////////////////>
+
+    表1 UI控件缩写表
+    
+    控件	                缩写	        例子
+    LinearLayout	    ll	        llFriend或者mFriendLL
+    RelativeLayout	    rl	        rlMessage或mMessageRL
+    FrameLayout	        fl	        flCart或mCartFL
+    TableLayout	        tl	        tlTab或mTabTL
+    Button	            btn	        btnHome或mHomeBtn
+    ImageButton	        ibtn	    btnPlay或mPlayIBtn
+    TextView	        tv	        tvName或mNameTV
+    EditText	        et	        etName或mNameET
+    ListView	        lv	        lvCart或mCartLV
+    ImageView	        iv	        ivHead或mHeadIV
+    GridView	        gv	        gvPhoto或mPhotoGV
+    
+    
+    表2 常见的英文单词缩写:
+    
+    名称	                    缩写
+    icon	                ic（主要用在app的图标）
+    color	                cl（主要用于颜色值）
+    divider	                di（主要用于分隔线，不仅包括Listview中的divider，还包括普通布局中的线）
+    selector	            sl（主要用于某一view多种状态，不仅包括Listview中的selector，还包括按钮的selector）
+    average	                avg
+    background	            bg（主要用于布局和子布局的背景）
+    buffer	                buf
+    control	                ctrl
+    delete	                del
+    document	            doc
+    error	                err
+    escape	                esc
+    increment	            inc
+    infomation	            info
+    initial	                init
+    image	                img
+    Internationalization	I18N
+    length	                len
+    library	                lib
+    message	                msg
+    password	            pwd
+    position	            pos
+    server	                srv
+    string	                str
+    temp	                tmp
+    window	                wnd(win)
